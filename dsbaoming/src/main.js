@@ -6,8 +6,7 @@ import md5 from 'js-md5'
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios;
 Vue.prototype.$md5 = md5;
-Vue.prototype.$url = 'http://106.14.227.190:3000';
-// Vue.prototype.$url = 'http://127.0.0.1:3000';
+Vue.prototype.$url = 'http://127.0.0.1:4000';
 
 
 new Vue({

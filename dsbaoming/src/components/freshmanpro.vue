@@ -102,15 +102,17 @@ export default {
                             ID:this.freshmanpro.ID+'',
                             problem:this.freshmanpro.choosedpro
                         }).then((response)=>{
-                            if(response.data==true){
+                            if(response.data.status_code == 500){
+                                this.$Message.error('服务器内部故障!');
+                            }else if(response.data.status_code == 566){
+                                this.$Message.error('数据校验不通过!');
+                            }else{
                                 this.$Message.success('提交成功!');
                                 setTimeout(()=>{
                                    this.$router.push({
                                        path:'/'
                                    }) 
                                 },1000)
-                            }else{
-                                this.$Message.error('提交失败!服务器出错!');
                             }
                         }).catch((err)=>{
                             console.log(err);

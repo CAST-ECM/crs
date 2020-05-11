@@ -57,31 +57,39 @@
                         this.$axios.post(`${this.$url}/identify`,{
                             ID:this.verifyid.ID+''
                         }).then((response)=>{
-                            if(response.data!==666){
-                                this.$Message.success({
-                                    content: 'MD5码验证通过!',
-                                    duration: 2
-                                });
-                                setTimeout(()=>{
-                                    // console.log(response.data[0]);
-                                    if(!response.data[0].teamName){
-                                        // console.log('是新生组');
-                                        this.$emit('senddatatofather',{
-                                            componentflag:'freshmanpro',
-                                            ID:response.data[0].ID    
-                                        })
-                                        
-                                    }else{
-                                        this.$emit('senddatatofather',{
-                                            componentflag:'otherspro',
-                                            ID:response.data[0].ID    
-                                        })
-                                    }
-                                },500)
-                                
-                            }else{
-                                this.$Message.info('MD5码输入有误!');
+                            
+                            if(response.data.status_code == 500){
+                                this.$Message.error('服务器内部故障!');
                             }
+                            else if(response.data.status_code == 566){
+                                this.$Message.error('数据校验不通过!');
+                            }else{
+                                let data = response.data.data;
+                                if(data!==404){
+                                    this.$Message.success({
+                                        content: 'MD5码验证通过!',
+                                        duration: 2
+                                    });
+                                        setTimeout(()=>{
+                                            //组件跳转
+                                            if(!data[0].teamName){
+                                                this.$emit('senddatatofather',{
+                                                    componentflag:'freshmanpro',
+                                                    ID:data[0].ID    
+                                                })
+                                                
+                                            }else{
+                                                this.$emit('senddatatofather',{
+                                                    componentflag:'otherspro',
+                                                    ID:data[0].ID    
+                                                })
+                                            }
+                                        },500)                              
+                                }else{
+                                    this.$Message.info('认证码不存在!');
+                                }
+                            }
+                            
                         }).catch((err)=>{
                             console.log(err);
                             

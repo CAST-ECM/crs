@@ -3,9 +3,9 @@ const config = {
     //启动端口
     port: 4000,
     database:{
-        DATABASE: 'xdslogin',
+        DATABASE: 'dslogin',
         USERNAME: 'root',
-        PASSWORD: 'Your Password',
+        PASSWORD: '110119kan',
         PORT:'3306',
         HOST:'127.0.0.1' 
     }

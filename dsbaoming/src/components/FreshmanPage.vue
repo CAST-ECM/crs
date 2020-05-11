@@ -4,7 +4,7 @@
             <div>
                 <MenuItem name="1">
                 <Icon type="ios-flag-outline" />
-                    新生组报名
+                    单人组报名
                 </MenuItem>
             </div>
         </Menu>
@@ -167,30 +167,36 @@ export default {
           this.$refs['stuInfo'].validate((val)=>{
               if (val) {
                     this.stuInfo.md5Code = this.$md5(this.stuInfo.studentNum+this.stuInfo.studentName+this.stuInfo.majorDire+this.stuInfo.prefer+this.stuInfo.tele+'jkispretty');
-                    this.$axios.post(`${this.$url}/freshman`,{studentNum:this.stuInfo.studentNum+'',
-                    studentName:this.stuInfo.studentName+'',studentClass:this.stuInfo.studentClass+'',
-                    majorDire:this.stuInfo.majorDire+'',tele:this.stuInfo.tele+'',
+                    this.$axios.post(`${this.$url}/freshman`,{
+                    studentNum:this.stuInfo.studentNum+'',
+                    studentName:this.stuInfo.studentName+'',
+                    studentClass:this.stuInfo.studentClass+'',
+                    majorDire:this.stuInfo.majorDire+'',
+                    tele:this.stuInfo.tele+'',
                     prefer:this.stuInfo.prefer+'',
-                    md5Code:this.stuInfo.md5Code+''}).then((response)=>{
+                    md5Code:this.stuInfo.md5Code+''
+                    }).then((response)=>{
                         var result = response.data;
-                        // console.log(response);
-                        switch(result){
-                            case "标识码重复":
-                                this.$Message.error('请勿重复报名!');
-                                break;
-                            case "学号重复":
-                                this.$Message.error('此学号已被报名!');
-                                break;
-                            case "手机号重复":
-                                this.$Message.error('此手机号已被报名！');
-                                break;
-                            case "查重通过":
+                        console.log(result);
+                        switch (result.status_code) {
+                            case 200:
                                 this.$Modal.success({
                                     title:'报名成功!',
-                                    content: '你的MD5码为:'+this.stuInfo.md5Code+',请妥善保管MD5码以方便后续信息修改和选题!'
-
+                                    content: `你的认证码为:${this.stuInfo.md5Code},请妥善保管认证码以方便后续信息修改和选题!`
                                 });
                                 break;
+                            case 567:
+                                this.$Message.error('该学号已被报名!');
+                                break;
+                            case 568:
+                                this.$Message.error('该手机号已被报名!');
+                                break;
+                            case 566:
+                                this.$Message.error('数据校验不通过!');
+                                break;
+                            case 500:
+                                this.$Message.error('服务器内部故障!');
+                                break;    
                         }
 
                     }).catch((err)=>{

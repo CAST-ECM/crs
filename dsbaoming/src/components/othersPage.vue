@@ -4,7 +4,7 @@
     <div>
         <MenuItem name="1">
         <Icon type="ios-flag-outline" />
-            其他组报名
+            多人组报名
         </MenuItem>
     </div>
   </Menu>
@@ -155,39 +155,29 @@ export default {
       }).then((response)=>{
         var result = response.data;
         console.log(result);
-        switch(result){
-          case "队伍名称重复":
-            this.$Message.error('队伍名称重复,请修改！');
-            break;
-          case "队长学号重复":
-            this.$Message.error('队长学号已被报名!');
-            break;
-          case "队长电话重复":
-            this.$Message.error('队长电话重复！');
-            break;
-          case "队员一学号重复":
-            this.$Message.error('队员一学号已被报名!');
-            break;
-          case "队员一电话重复":
-            this.$Message.error('队员一电话重复！');
-            break;
-          case "队员二学号重复":
-            this.$Message.error('队员二学号已被报名!');
-            break;
-          case "队员二电话重复":
-            this.$Message.error('队员二电话重复!');
-            break;
-          case "查重通过":
+        switch(result.status_code){
+          case 200:
             this.$Modal.success({
                 title:'报名成功!',
                 content: `你们队伍的MD5码为:${this.stuInfo.md5Code},请妥善保管MD5码以方便后续信息修改和选题!`
             });
             break;
-            
+          case 566:
+            this.$Message.error('数据校验不通过!');
+            break;
+          case 567:
+            this.$Message.error('部分队友学号已被报名');
+            break;
+          case 568:
+            this.$Message.error('部分队友手机号已被报名');
+            break;
+          case 500:
+            this.$Message.error('服务器内部故障!');
+            break;
         }
       }).catch((err)=>{
           console.log(err);
-          this.$Message.error('提交失败！错误信息为');
+          this.$Message.error('提交失败！');
       });
     },
     getback(data){

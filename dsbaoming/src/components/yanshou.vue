@@ -145,22 +145,14 @@ export default {
                             Tele:this.yanshouInfo.stuPhone,
                             MD5Code:this.yanshouInfo.MD5Code
                         }).then((response)=>{
-                            console.log(response.data)
-                            switch (response.data.err_code || response.data.success_code) {
-                                case 301:
-                                    this.$Message.error('MD5检验错误!');
-                                    break;
-                                case 302:
-                                    this.$Message.error('参数检验错误!');
-                                    break;
-                                case 200:
-                                    this.$Message.success('申请信息提交成功!');
-                                    break;
-                                case 502:
-                                    this.$Message.error('内部服务器出错!');
-                                    break;
-                                default:
-                                    break;
+                            if(response.data.status_code == 500){
+                                this.$Message.error('内部服务器出错!');
+                            }else if(response.data.status_code == 566){
+                                 this.$Message.error('数据校验不通过!');
+                            }else if(response.data.status_code == 566){
+                                 this.$Message.error('认证码不存在!');
+                            }else{
+                                this.$Message.success('申请信息提交成功!');
                             }
                         }).catch((err)=>{
                             this.$Message.error('通信错误!');
@@ -184,22 +176,15 @@ export default {
                             Tele:this.yanshouInfo.stuPhone,
                             MD5Code:this.yanshouInfo.MD5Code
                         }).then((response)=>{
-                            console.log(response.data)
-                            switch (response.data.err_code || response.data.success_code) {
-                                case 301:
-                                    this.$Message.error('MD5检验错误!');
-                                    break;
-                                case 302:
-                                    this.$Message.error('参数检验错误!');
-                                    break;
-                                case 200:
-                                    this.$Message.success('申请信息提交成功!');
-                                    break;
-                                case 502:
-                                    this.$Message.error('内部服务器出错!');
-                                    break;
-                                default:
-                                    break;
+                             if(response.data.status_code == 500){
+                                this.$Message.error('内部服务器出错!');
+                                console.log(response)
+                            }else if(response.data.status_code == 566){
+                                 this.$Message.error('数据校验不通过!');
+                            }else if(response.data.status_code == 566){
+                                 this.$Message.error('认证码不存在!');
+                            }else{
+                                this.$Message.success('申请信息提交成功!');
                             }
                         }).catch((err)=>{
                             this.$Message.error('通信错误!');
@@ -217,28 +202,32 @@ export default {
                                     this.$axios.post(`${this.$url}/queryinfobyphone`,{
                                         Tele:this.searchInfo.tele
                                     }).then((response)=>{
-                                        console.log(response.data);
-                                        if(response.data === 666){
-                                            this.$Message.warning('查无此人!');
-                                            this.flag = true;
+                                        if(response.data.status_code == 500){
+                                            this.$Message.error('服务器内部故障!');
+                                        }else if(response.data.status_code == 566){
+                                            this.$Message.error('数据校验不通过!');
                                         }else{
-                                            this.flag = false;
-                                            if(!response.data.teamName){
-                                                //新生组情况
-                                                this.othersflag = false;
-                                                this.freshmanflag = true;
-                                                this.yanshouInfo.stuName = response.data.studentName;
-                                                this.yanshouInfo.MD5Code = response.data.ID;
-
+                                            let data = response.data.data;
+                                            if(data !== 404){
+                                                if(!data[0].teamName){
+                                                    //新生组情况
+                                                    this.othersflag = false;
+                                                    this.freshmanflag = true;
+                                                    this.yanshouInfo.stuName = data[0].studentName;
+                                                    this.yanshouInfo.MD5Code = data[0].ID;
+                                                }else{
+                                                    //组队时情况
+                                                    this.othersflag = true;
+                                                    this.freshmanflag = false;
+                                                    this.yanshouInfo.stuName = data[0].cName;
+                                                    this.yanshouInfo.MD5Code = data[0].ID;
+                                                }
                                             }else{
-                                                //组队时情况
-                                                this.othersflag = true;
-                                                this.freshmanflag = false;
-                                                this.yanshouInfo.stuName = response.data.cName;
-                                                this.yanshouInfo.MD5Code = response.data.ID;
+                                                this.$Message.warning('查无此人!');
+                                                this.flag = true;
                                             }
                                         }
-                                    
+
                                     }).catch((err)=>{
                                         this.$Message.error('通信错误!');
                                         this.flag = true;

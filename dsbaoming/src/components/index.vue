@@ -1,28 +1,30 @@
 <template>
 <div class="maincontent">
   <div class="title">
-    <span>通</span>
-    <span>院</span>
-    <span>电</span>
+    <span>比</span>
     <span>赛</span>
+    <span>报</span>
+    <span>名</span>
+    <span>系</span>
+    <span>统</span>
   </div>
   <div class="select1">
-    <Button type="primary" ghost v-on:click="toFreshmanPage" style="width:100px;" size="large">新手组报名</Button>
+    <Button type="primary" ghost v-on:click="toFreshmanPage" style="width:100px;" size="large">单人组报名</Button>
   </div>
   <div class="select2">
-      <Button type="primary" ghost v-on:click="toOthersPage" style="width:100px;" size="large">其他组报名</Button>
+      <Button type="primary" ghost v-on:click="toOthersPage" style="width:100px;" size="large">多人组报名</Button>
   </div>
   <div class="select3">
       <Button type="primary" ghost v-on:click="tosearchInfo" style="width:100px;" size="large">信息查询</Button>
   </div>
   <div class="select4">
-      <Button type="primary" ghost v-on:click="toselectProblems" style="width:100px;" size="large">电赛选题</Button>
+      <Button type="primary" ghost v-on:click="toselectProblems" style="width:100px;" size="large">比赛选题</Button>
   </div>
   <div class="select5">
       <Button type="primary" ghost v-on:click="toCheck" style="width:100px;" size="large">申请验收</Button>
   </div>
   <footer>
-      ©CAST计算机部提供技术支持
+      
   </footer>
 </div>
  

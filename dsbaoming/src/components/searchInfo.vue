@@ -142,26 +142,32 @@ export default {
                         this.$axios.post(`${this.$url}/queryinfobyphone`,{
                             Tele:this.searchInfo.tele
                         }).then((response)=>{
-                          if(response.data!='666'){
-                            if(response.data.teamName){
+                          let data = response.data.data;
+                          if(response.data.status_code == 500){
+                             this.$Message.error('数据验证失败!');
+                          }
+                          // console.log(data);
+                          // if()
+                          if(data!='404'){
+                            if(data[0].teamName){
                               // console.log('组队的');
                               this.flag = false;
                               this.flag1 = false;
                               this.flag2 = true;
-                              this.othersInfo.ID = response.data.ID;
-                              this.othersInfo.teamName = response.data.teamName;
-                              this.othersInfo.cName = response.data.cName;
-                              this.othersInfo.tm1Name = response.data.tm1Name;
-                              this.othersInfo.tm2Name = response.data.tm2Name || '';
-                              this.othersInfo.selectedPro = response.data.selectedPro || '';
+                              this.othersInfo.ID = data[0].ID;
+                              this.othersInfo.teamName = data[0].teamName;
+                              this.othersInfo.cName = data[0].cName;
+                              this.othersInfo.tm1Name = data[0].tm1Name;
+                              this.othersInfo.tm2Name = data[0].tm2Name || '';
+                              this.othersInfo.selectedPro = data[0].selectedPro || '';
                             }else{
                               // console.log('个人');
                               this.flag = false;
                               this.flag1 = true;
                               this.flag2 = false;
-                              this.freshmanInfo.ID =response.data.ID;
-                              this.freshmanInfo.studentName = response.data.studentName,
-                              this.freshmanInfo.selectedPro = response.data.selectedPro || '';
+                              this.freshmanInfo.ID =data[0].ID;
+                              this.freshmanInfo.studentName = data[0].studentName,
+                              this.freshmanInfo.selectedPro = data[0].selectedPro || '';
                             }
                             
                           }else{
